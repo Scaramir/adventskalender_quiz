@@ -1,4 +1,4 @@
-//Maximilian Otto - 06.12.2020 - adventadvent2.cpp
+//Maximilian Otto - updated: 18.12.2020 - adventadvent2.cpp
 //compile with: g++ -std=c++14 -static-libgcc -static-libstdc++ -O3 -pedantic adventadvent2.cpp -o adventadvent2
 //still in progress
 
@@ -9,7 +9,7 @@
 #include <vector>
 #include <cctype> 
 #include <stdio.h>
-#ifdef _WIN32      //for using the function sleep
+#ifdef _WIN32      
 #include <Windows.h>
 #else
 #include <unistd.h>
@@ -33,10 +33,17 @@ vector<string> spiel = {"Space Colony",
                         "Tetris", 
                         "Spore Creature Creator", 
                         "Need for Speed - Most Wanted", 
-                        "Dungeon Keeper 2", 
+                        "Dungeon Keeper 2/3", 
                         "Herrscher des Olymp - Zeus", 
                         "Civilization VI", 
-                        "Far Cry: Primal"
+                        "Far Cry: Primal",
+                        "Ballerburg",
+                        "Anno 1701",
+                        "3D Pinball",
+                        "Space Invaders",
+                        "Wii Sports Resort",
+                        "Titan Quest",
+                        "Wii Rayman Raving Rabbits"
                         };
 
 vector<string> frage = {"Wie lautet der Name des einzigen Norwegers der Crew?",
@@ -51,16 +58,23 @@ vector<string> frage = {"Wie lautet der Name des einzigen Norwegers der Crew?",
                         "Wo spielt das erste Tutorial?",
                         "Welche Farbe hat der Wuerfel?",
                         "Wofuer steht das Schmetterlingssymbol?",
-                        "",
-                        "Wie heisst der erste kampagnengegner?",
+                        "Was schaltet man frei, wenn man das erste Rennen um die Schluessel zur Stadt mit dem 2. Platz belegt?",
+                        "Wie heisst der erste Kampagnengegner?",
                         "Gegen was fuer eine Kreatur kaempft Zeus im Vorspann?",
                         "Wie lautet der hoechste Schwierigkeitsgrad?",
-                        ""
+                        "Durch welche Farbe zeichnen sich Tiere mit seltenem Fell aus?\n    Tipp: -> Jaegerblick\n",
+                        "Wie lautet der Standardname des Computergegners?",
+                        "Wie lautet der Name deines ersten Schiffes?",
+                        "Welche Zahl steht auf dem Kennzeichenschild des Raumschiffs?",
+                        "Welche Farbe hat das Ufo?",
+                        "Wie nennt sich der Vulkan von Wuhu Island?\n    Tipp: -> Rundflug\n",
+                        "Wie lautet der Name des ersten NPCs, mit dem man redet?",
+                        "Was für ein Tier ist Zensi?\n    Tipp: -> 1. links vom Eisentor\n"
                         };
 
 vector<string> antwort = {"stig",
                           "mortimer grusel",
-                          "dickerchen",
+                          "1000",
                           "vanilla hills",
                           "jokerfloh",
                           "1",
@@ -69,12 +83,19 @@ vector<string> antwort = {"stig",
                           "c-3po",
                           "italien",
                           "gelb",
-                          "hippity hüpf",
-                          "",
-                          "fürst antonios",
-                          "hydra",
-                          "gottheit",
-                          ""
+                          "hippity hüpf || huepf",
+                          "nitrobrenner",
+                          "fuerst antonius || lord roussimoff",
+                          "hydra || typhon",
+                          "gottheit || deity",
+                          "gelb",
+                          "erich",
+                          "neptun",
+                          "2001",
+                          "gelb",
+                          "mount tenganamanga",
+                          "korythus",
+                          "eine kuh"
                         };
 
 vector<string> symbol = {"Tuerchen",
@@ -88,13 +109,19 @@ vector<string> symbol = {"Tuerchen",
                          "Marzipan",
                          "Kamin",
                          "Handschuhe",
-                         "Schmetterlingsymbol",
                          "Lichter",
-                         "",
+                         "Joker",
                          "Geschenk",
                          "Socken",
                          "Zimt",
-                         ""
+                         "Katze",
+                         "Wandern",
+                         "Tanne",
+                         "Tee",
+                         "Winter",
+                         "Weihnachten",
+                         "Schokolade",
+                         "Fondue"
                         };
 
 /**
@@ -177,11 +204,16 @@ string ask_for_input(string s){
     string b = "";
     getline(cin, b);
     cin.clear(); 
+    if(b == ""){
+        terminal_fill("Huch, mit einer leeren Antwort kann ich nichts anfangen.\nPlease try again.", 12);
+        b = ask_for_input(s);
+    }
     std::transform(b.begin(), b.end(), b.begin(), ::tolower);   //alles in Kleinbuchstaben umwandeln.
     return b; 
 }
 
 int fragen(int a);                                              //redefine later or write a hpp-file instead #compileOrder
+
 /**
  * asks user, if he wants to continue with the next question
  * answer is delivered
@@ -203,6 +235,11 @@ string alternative_quiz(){
     string alt_quests[] = {"altquest1", "altquest2", "altquest3", "altquest4", "altquest5", "altquest6"};
     string alt_ants[] = {"altant1", "altant2", "altant3", "altant4", "atant5", "altant6"};
     
+    //Gianna mus noch alternativen rausuchen und hier oben notieren. Bis dahin wird diese Fkt deaktiviert.| 
+    terminal_fill("Die Alternativen sind noch nicht definiert und installiert. \nVersuche doch bitte, die eigentliche Frage zu beantworten.", 14);
+    return "gelb";
+    //----------------------------------------------------------------------------------------------------|
+
     terminal_fill("\n\nAlternative Spiele waeren:");
     for(size_t i = 1; i <= sizeof(alt_games)/sizeof(alt_games[0]); ++i ){
         cout << "    " << i << ".) " << alt_games[i-1] << endl;
@@ -245,9 +282,9 @@ int fragen(int a){
         c_answer = alternative_quiz();
     }
     ///
-    string b = ask_for_input("\n\nBitte gib nun deine Antwort ein:");
-    if( strstr(b.c_str(), antwort[a-1].c_str()) ||  strstr(b.c_str(), c_answer.c_str())){              //Checken, ob in der Antwort das richtige Wort enthalten ist
-        terminal_fill("\nDiese Antowrt ist korrekt.");
+    string b = ask_for_input("\n\nBitte gib nun deine Antwort ein:");                    //ab hier umgedreht
+    if( strstr(b.c_str(), antwort[a-1].c_str()) ||  strstr(b.c_str(), c_answer.c_str())  ||  strstr(antwort[a-1].c_str(), b.c_str()) || strstr(c_answer.c_str(), b.c_str()) ){              //Checken, ob in der Antwort das richtige Wort enthalten ist
+        terminal_fill("\nDiese Antwort ist korrekt.");
         terminal_fill("\nDein Adventskalendertuerchen fuer heute hat das Symbol\n    ");
         cout << symbol[a-1];
         terminal_fill(" \n\ndarauf. ");
@@ -269,8 +306,8 @@ int fragen(int a){
 int main() {
     terminal_fill("Hallo.\n \n");
     
-    int a = stoi(file_reader()) + 1;                        //last solved riddle +1
-    //cin.ignore();                                               //chechpoint;
+    int a = stoi(file_reader()) + 1;                            //last solved riddle +1
+    //cin.ignore();                                             //chechpoint;
     cin.clear();
     listing(a);                                                 //Liste aufrufen
     fragen(a);                                                  //Quiz
