@@ -219,7 +219,7 @@ int fragen(int a);                                              //redefine later
  * answer is delivered
  */
 bool proceed_quiz(){
-    string antwort = ask_for_input("Moechtest Du schon mal das naechste Quiz angehen und etwas vorarbeiten?\n    Type 'yes' or 'no':");
+    string antwort = ask_for_input("Moechtest Du schon mal das naechste Quiz angehen und etwas vorarbeiten?\n\tType 'yes' or 'no':");
     if (strstr(antwort.c_str(), "y")){
         return true;
     }
@@ -282,7 +282,7 @@ int fragen(int a){
         c_answer = alternative_quiz();
     }
     ///
-    string b = ask_for_input("\n\nBitte gib nun deine Antwort ein:");                    //ab hier umgedreht
+    string b = ask_for_input("\n\nBitte gib nun deine Antwort ein:");
     if( strstr(b.c_str(), antwort[a-1].c_str()) ||  strstr(b.c_str(), c_answer.c_str())  ||  strstr(antwort[a-1].c_str(), b.c_str()) || strstr(c_answer.c_str(), b.c_str()) ){              //Checken, ob in der Antwort das richtige Wort enthalten ist
         terminal_fill("\nDiese Antwort ist korrekt.");
         terminal_fill("\nDein Adventskalendertuerchen fuer heute hat das Symbol\n    ");
@@ -290,7 +290,7 @@ int fragen(int a){
         terminal_fill(" \n\ndarauf. ");
         file_writer(a);
         if(proceed_quiz())                                      //wanna continue? 
-            fragen((stoi(file_reader()) +1));
+            fragen((stoi(file_reader()) + 1));
     } 
     else {
         terminal_fill("\n\n--Something happend... \n--I am crashing.. \n-- :o  \n--I am trying to restart myself.\n--...\n\n\n", 12);
